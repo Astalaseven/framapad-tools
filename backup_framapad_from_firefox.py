@@ -14,20 +14,20 @@ BACKUP_DIR = HOME_DIR + '/FramapadBackup/'
 def retrieve_urls(profile):
     conn = sqlite3.connect(profile + 'places.sqlite')
 
-    urls = conn.execute('''SELECT DISTINCT url 
+    urls = conn.execute('''SELECT DISTINCT url
                             FROM moz_places
                             WHERE url
                             LIKE "%lite%framapad.org/p/%"
-                            AND url NOT LIKE "%/timeslider%" AND url NOT LIKE "%/";''')
+                            AND url NOT LIKE "%/timeslider%"
+                            AND url NOT LIKE "%/";''')
 
     return urls
 
 def save_text(url):
     content = urlopen(url + '/export/txt')
-
     path = BACKUP_DIR + url.split('/')[-1]
 
-    with open(path + ".txt", 'w') as f:
+    with open(path + '.txt', 'w') as f:
         f.write(content.read())
 
 
