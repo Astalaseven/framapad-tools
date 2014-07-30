@@ -22,7 +22,7 @@ def retrieve_urls(profile):
 
     return urls
 
-def save_text(profile, url):
+def save_text(url):
     content = urlopen(url + '/export/txt')
 
     path = BACKUP_DIR + url.split('/')[-1]
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
         for url in urls:
             print("Téléchargement de {}".format(url[0]))
-            save_text(profile, url[0])
+            save_text(url[0])
 
     print("Tous les pads trouvés ont été téléchargés ici : {}".format(BACKUP_DIR))
 
