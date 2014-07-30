@@ -27,7 +27,7 @@ def save_text(url):
 
     path = BACKUP_DIR + url.split('/')[-1]
 
-    with open(path, 'w') as f:
+    with open(path + ".txt", 'w') as f:
         f.write(content.read())
 
 
