@@ -36,11 +36,12 @@ def retrieve_chrome_urls(profile):
     return urls
 
 def save_text(url):
-    content = urlopen(url + '/export/txt')
-    path = BACKUP_DIR + url.split('/')[-1]
+    path = BACKUP_DIR + url.split('/')[-1] + ".txt"
 
     if not os.path.exists(path):
-        with open(path + '.txt', 'w') as f:
+        content = urlopen(url + '/export/txt')
+
+        with open(path, 'w') as f:
             f.write(content.read())
 
 
