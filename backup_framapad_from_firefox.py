@@ -39,7 +39,7 @@ if __name__ == "__main__":
     if OS_TYPE == "Linux":
         profiles = glob(HOME_DIR + "/.mozilla/firefox/*.default/")
     elif OS_TYPE == "Windows":
-        profiles = glob(os.getenv('appdata') + "\Mozilla\Firefox\Profiles\*.default\\")
+        profiles = glob(os.getenv('APPDATA') + "\Mozilla\Firefox\Profiles\*.default\\")
     else:
         profiles = glob(HOME_DIR + "/Library/Mozilla/.mozilla/firefox/*.default/")
 
