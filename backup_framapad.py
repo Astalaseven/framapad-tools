@@ -8,7 +8,7 @@ from glob import glob
 from urllib2 import urlopen
 
 HOME_DIR = os.path.expanduser('~')
-BACKUP_DIR = HOME_DIR + '/FramapadBackup/'
+BACKUP_DIR = os.path.join(HOME_DIR, 'FramapadBackup')
 
 def get_profiles(os_type):
 
