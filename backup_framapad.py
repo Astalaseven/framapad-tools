@@ -7,9 +7,31 @@ import sqlite3
 from glob import glob
 from urllib2 import urlopen
 
-OS_TYPE = platform.system()
-HOME_DIR = os.getenv('HOME')
+HOME_DIR = os.path.expanduser('~')
 BACKUP_DIR = HOME_DIR + '/FramapadBackup/'
+
+def get_profiles(os_type):
+
+    if os_type == "Linux":
+            firefox_profiles = glob(HOME_DIR + "/.mozilla/firefox/*.default/")
+            chrome_profiles = glob(HOME_DIR + "/.config/google-chrome/Default/")
+            chromium_profiles = glob(HOME_DIR + "/.config/chromium/Default/")
+
+    elif os_type == "Windows":
+        firefox_profiles = glob(os.getenv('APPDATA') + "\Mozilla\Firefox\Profiles\*.default\\")
+
+        if platform.release() == "XP":
+            chrome_profiles = glob("C:\Documents and Settings\{}\Local Settings\Application Data\Google\Chrome\User Data\Default\\".format(os.getenv("USERNAME")))
+            chromium_profiles = glob("C:\Documents and Settings\{}\Local Settings\Application Data\Chromium\User Data\Default\\".format(os.getenv("USERNAME")))
+        else:
+            chrome_profiles = glob("C:\Users\{}\AppData\Local\Google\Chrome\User Data\Default\\".format(os.getenv("USERNAME")))
+            chromium_profiles = glob("C:\Users\{}\AppData\Local\Chromium\User Data\Default\\".format(os.getenv("USERNAME")))
+    else:
+        firefox_profiles = glob(HOME_DIR + "/Library/Mozilla/.mozilla/firefox/*.default/")
+        chrome_profiles = glob(HOME_DIR + "/Library/Application Support/Google/Chrome/Default/")
+        chromium_profiles = glob(HOME_DIR + "/Library/Application Support/Chromium/Default/")
+
+    return firefox_profiles, chrome_profiles, chromium_profiles
 
 def retrieve_firefox_urls(profile):
     conn = sqlite3.connect(profile + 'places.sqlite')
@@ -50,24 +72,7 @@ if __name__ == "__main__":
     if not os.path.exists(BACKUP_DIR):
         os.mkdir(BACKUP_DIR)
 
-    if OS_TYPE == "Linux":
-        firefox_profiles = glob(HOME_DIR + "/.mozilla/firefox/*.default/")
-        chrome_profiles = glob(HOME_DIR + "/.config/google-chrome/Default/")
-        chromium_profiles = glob(HOME_DIR + "/.config/chromium/Default/")
-
-    elif OS_TYPE == "Windows":
-        firefox_profiles = glob(os.getenv('APPDATA') + "\Mozilla\Firefox\Profiles\*.default\\")
-
-        if platform.release() == "XP":
-            chrome_profiles = glob("C:\Documents and Settings\{}\Local Settings\Application Data\Google\Chrome\User Data\Default\\".format(os.getenv("USERNAME")))
-            chromium_profiles = glob("C:\Documents and Settings\{}\Local Settings\Application Data\Chromium\User Data\Default\\".format(os.getenv("USERNAME")))
-        else:
-            chrome_profiles = glob("C:\Users\{}\AppData\Local\Google\Chrome\User Data\Default\\".format(os.getenv("USERNAME")))
-            chromium_profiles = glob("C:\Users\{}\AppData\Local\Chromium\User Data\Default\\".format(os.getenv("USERNAME")))
-    else:
-        firefox_profiles = glob(HOME_DIR + "/Library/Mozilla/.mozilla/firefox/*.default/")
-        chrome_profiles = glob(HOME_DIR + "/Library/Application Support/Google/Chrome/Default/")
-        chromium_profiles = glob(HOME_DIR + "/Library/Application Support/Chromium/Default/")
+    firefox_profiles, chrome_profiles, chromium_profiles = get_profiles(platform.system())
 
     urls = []
 
