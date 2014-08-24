@@ -11,11 +11,10 @@ HOME_DIR = os.path.expanduser('~')
 BACKUP_DIR = os.path.join(HOME_DIR, 'FramapadBackup')
 
 def get_profiles(os_type):
-
     if os_type == "Linux":
-            firefox_profiles = glob(HOME_DIR + "/.mozilla/firefox/*.default/")
-            chrome_profiles = glob(HOME_DIR + "/.config/google-chrome/Default/")
-            chromium_profiles = glob(HOME_DIR + "/.config/chromium/Default/")
+        firefox_profiles = glob(HOME_DIR + "/.mozilla/firefox/*.default/")
+        chrome_profiles = glob(HOME_DIR + "/.config/google-chrome/Default/")
+        chromium_profiles = glob(HOME_DIR + "/.config/chromium/Default/")
 
     elif os_type == "Windows":
         firefox_profiles = glob(os.getenv('APPDATA') + "\Mozilla\Firefox\Profiles\*.default\\")
@@ -58,7 +57,7 @@ def retrieve_chrome_urls(profile):
     return urls
 
 def save_text(url):
-    path = BACKUP_DIR + url.split('/')[-1] + ".txt"
+    path = os.path.join(BACKUP_DIR, url.split('/')[-1] + ".txt")
 
     if not os.path.exists(path):
         content = urlopen(url + '/export/txt')
@@ -70,7 +69,7 @@ def save_text(url):
 if __name__ == "__main__":
 
     if not os.path.exists(BACKUP_DIR):
-        os.mkdir(BACKUP_DIR)
+        os.makedirs(BACKUP_DIR)
 
     firefox_profiles, chrome_profiles, chromium_profiles = get_profiles(platform.system())
 
